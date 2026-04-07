@@ -1,0 +1,10 @@
+syntax = "proto3";
+package astar;
+
+message Point { int32 x = 1; int32 y = 2; }
+message PathRequest { Point start = 1; Point end = 2; }
+message PathResponse { repeated Point path = 1; }
+
+service AStar {
+  rpc ComputePath(PathRequest) returns (PathResponse);
+}
