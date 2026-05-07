@@ -2,5 +2,5 @@
 #include <cmath>
 
 namespace geocalcul {
-    double haversine() { return 3.14; }
+    double haversine(double lat1, double lon1, double lat2, double lon2) { return 3.14; }
 }

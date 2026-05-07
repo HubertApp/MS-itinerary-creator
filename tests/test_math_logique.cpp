@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <cmath>
 #include <type_traits>
 #include "core/math_utils.hpp"
 
@@ -12,8 +13,19 @@ TEST(HelloWorldTest, StringCheck) {
   EXPECT_EQ(hello, "Hello");
 }
 
-TEST(HaversineTest, CheckReturnFloat) {
+TEST(HaversineTest, CheckReturnNotNull){
+    double haversineResult = geocalcul::haversine(0.0, 0.0, 0.0, 0.0);
+    EXPECT_TRUE(!std::isnan(haversineResult)) << "La fonction devrait retourner un resultat non null/vide";
+}
+
+TEST(HaversineTest, CheckNotReturnInfiniteValue){
+    double haversineResult = geocalcul::haversine(0.0, 0.0, 0.0, 0.0);
+    EXPECT_TRUE(std::isfinite(haversineResult))  << "La fonction devrait retourner resultat fini";
+}
+
+TEST(HaversineTest, CheckReturnDouble) {
     using ReturnType = decltype(geocalcul::haversine(0.0, 0.0, 0.0, 0.0));
     bool isDouble = std::is_same<ReturnType, double>::value;
     EXPECT_TRUE(isDouble) << "La fonction devrait retourner un double";
 }
+
