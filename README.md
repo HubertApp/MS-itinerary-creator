@@ -1,5 +1,12 @@
 # Guidelines
 https://ssciwr.github.io/guidelines/cpp/
+https://blog.frankel.ch/imperative-functional-programming/4/
+
+Branchless éviter misprediction
+(retrouver lien docs intel)
+
+
+
 
 # MS-itinerary-creator
 Microservice de calcul d'itinéraire en C++ via l'algorithme de A* avec heurisitique de Haversine.
