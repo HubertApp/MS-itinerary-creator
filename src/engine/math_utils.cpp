@@ -1,6 +1,6 @@
+#include "core/math_utils.hpp"
+#include <cmath>
 
-
-float haversine(){
-
-    return 3.14;
+namespace geocalcul {
+    double haversine() { return 3.14; }
 }
