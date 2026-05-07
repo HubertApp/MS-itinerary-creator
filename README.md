@@ -16,9 +16,27 @@ En plus de la logique de tdd, ce microservice a utiliser les principes de dével
 
 Elle a été choisie pour plusieurs raisons, notamment pour sa capacité à faciliter la maintenance, réduire les bugs et améliorer la lisibilité. En utilisant des fonctions pures, on peut facilement raisonner sur le code qui demander pas mal de réflexion, ce qui est le cas pour l'implémentation de A* tout en évitant les effets de bord.
 
+
+# Outils et framework
+
+Test unitaire : Framework catch 2
+Communication : gRPC
+
+
 # Prérequis
 
+Docker
 
 
 # Installation
+
+En local sans docker :
+
+Via Docker :
+
+
+# Test unitaire aide 
+
+https://www.reddit.com/r/cpp_questions/comments/sobl57/how_to_unit_test/?tl=fr
+https://github.com/catchorg/Catch2
 
