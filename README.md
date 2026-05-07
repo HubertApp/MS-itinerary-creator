@@ -47,3 +47,8 @@ Via Docker :
 https://www.reddit.com/r/cpp_questions/comments/sobl57/how_to_unit_test/?tl=fr
 https://github.com/catchorg/Catch2
 
+
+
+## Rappel développement
+
+Vérifier que la division de l'haversine en fonction pur marche bien
