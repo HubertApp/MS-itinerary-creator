@@ -18,21 +18,20 @@ TEST(HelloWorldTest, StringCheck) {
 
 // A pas oublier a l'occasion de mocker une donnée unique
 
-TEST(HaversineToRadiansTest, CheckReturnNotNull){
-    double haversineResult = geocalcul::to_radians(180.0);
-    EXPECT_TRUE(!std::isnan(haversineResult)) << "La fonction devrait retourner un resultat non null/vide";
+static_assert(std::is_same_v<decltype(geocalcul::to_radians(0.0)), double>);
+
+TEST(HaversineToRadiansTest, BasicValidations) {
+    double result = geocalcul::to_radians(180.0);
+    ASSERT_TRUE(std::isfinite(result));
+    EXPECT_NEAR(result, M_PI, 1e-9); 
 }
 
-TEST(HaversineToRadiansTest, CheckNotReturnInfiniteValue){
-    double haversineResult = geocalcul::to_radians(180.0);
-    EXPECT_TRUE(std::isfinite(haversineResult))  << "La fonction devrait retourner resultat fini";
+TEST(HaversineToRadiansTest, ZeroAndNegative) {
+    EXPECT_DOUBLE_EQ(geocalcul::to_radians(0.0), 0.0);
+    EXPECT_NEAR(geocalcul::to_radians(-90.0), -1.570796, 1e-6);
 }
 
-TEST(HaversineToRadiansTest, CheckReturnDouble) {
-    using ReturnType = decltype(geocalcul::to_radians(180.0));
-    bool isDouble = std::is_same<ReturnType, double>::value;
-    EXPECT_TRUE(isDouble) << "La fonction devrait retourner un double";
-}
+// ----------------------------------------------------------------------
 
 TEST(HaversineCoreTestTest, CheckReturnNotNull){
     double haversineResult = geocalcul::haversine_core(50.0);
@@ -49,6 +48,8 @@ TEST(HaversineCoreTest, CheckReturnDouble) {
     bool isDouble = std::is_same<ReturnType, double>::value;
     EXPECT_TRUE(isDouble) << "La fonction devrait retourner un double";
 }
+
+//---------------------------------------------------------------------
 
 TEST(HaversineTest, CheckReturnNotNull){
     double haversineResult = geocalcul::haversine(0.0, 0.0, 0.0, 0.0);

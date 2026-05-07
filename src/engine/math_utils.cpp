@@ -20,9 +20,9 @@ namespace geocalcul {
 
     constexpr double RADIUS_EARTH = 6371.0;
 
-    [[nodiscard]] constexpr double to_radians(double degrees) {
-        return 3.14;
-    }
+    // [[nodiscard]] constexpr double to_radians(double degrees) {
+    //     return 3.14;
+    // }
 
     [[nodiscard]] double haversine_core(double delta) {
         return 3.14;
