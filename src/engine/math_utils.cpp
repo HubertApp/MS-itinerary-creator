@@ -18,15 +18,14 @@ namespace geocalcul {
 
     // const d = R * c; // in metres
 
-    constexpr double RADIUS_EARTH = 6371.0;
-
+    
     // [[nodiscard]] constexpr double to_radians(double degrees) {
     //     return 3.14;
     // }
 
-    [[nodiscard]] double haversine_core(double delta) {
-        return 3.14;
-    }
+    // [[nodiscard]] double haversine_core(double delta) {
+    //     return 3.14;
+    // }
 
     [[nodiscard]] double haversine(double lat1, double lon1, double lat2, double lon2) { 
         return 3.14; 

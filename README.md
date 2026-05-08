@@ -2,6 +2,9 @@
 https://ssciwr.github.io/guidelines/cpp/
 https://blog.frankel.ch/imperative-functional-programming/4/
 
+https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+https://google.github.io/styleguide/cppguide.html
+
 Branchless éviter misprediction
 (retrouver lien docs intel)
 
@@ -46,6 +49,8 @@ Via Docker :
 
 https://www.reddit.com/r/cpp_questions/comments/sobl57/how_to_unit_test/?tl=fr
 https://github.com/catchorg/Catch2
+
+Finalement utilisation de google Test pour les test unitaires beaucoup plus compréhensible que la syntaxe de catch2 
 
 
 
