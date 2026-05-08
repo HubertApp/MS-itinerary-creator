@@ -33,6 +33,8 @@ TEST(HaversineToRadiansTest, ZeroAndNegative) {
 
 // ----------------------------------------------------------------------
 
+static_assert(std::is_same_v<decltype(geocalcul::haversine_core(0.0)), double>);
+
 TEST(HaversineCoreTestTest, CheckReturnNotNull){
     double result = geocalcul::haversine_core(50.0);
     EXPECT_TRUE(!std::isnan(result)) << "La fonction devrait retourner un resultat non null/vide";
@@ -61,6 +63,8 @@ TEST(HaversineCoreTest, CheckReturnGreatResult){
 
 
 //---------------------------------------------------------------------
+
+// static_assert(std::is_same_v<decltype(geocalcul::to_radians(0.0)), double>);
 
 TEST(HaversineTest, CheckReturnNotNull){
     double result = geocalcul::haversine(0.0, 0.0, 0.0, 0.0);
