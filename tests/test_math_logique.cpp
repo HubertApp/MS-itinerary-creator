@@ -20,6 +20,16 @@ TEST(HelloWorldTest, StringCheck) {
 
 static_assert(std::is_same_v<decltype(geocalcul::to_radians(0.0)), double>);
 
+TEST(HaversineToRadiansTest, CheckReturnNotNull){
+    double result = geocalcul::to_radians(50.0);
+    EXPECT_TRUE(!std::isnan(result)) << "La fonction devrait retourner un resultat non null/vide";
+}
+
+TEST(HaversineToRadiansTest, CheckNotReturnInfiniteValue){
+    double result = geocalcul::to_radians(50.0);
+    EXPECT_TRUE(std::isfinite(result))  << "La fonction devrait retourner resultat fini";
+}
+
 TEST(HaversineToRadiansTest, CheckReturnGreatResult) {
     double result = geocalcul::to_radians(180.0);
     ASSERT_TRUE(std::isfinite(result));
@@ -35,7 +45,7 @@ TEST(HaversineToRadiansTest, ZeroAndNegative) {
 
 static_assert(std::is_same_v<decltype(geocalcul::haversine_core(0.0)), double>);
 
-TEST(HaversineCoreTestTest, CheckReturnNotNull){
+TEST(HaversineCoreTest, CheckReturnNotNull){
     double result = geocalcul::haversine_core(50.0);
     EXPECT_TRUE(!std::isnan(result)) << "La fonction devrait retourner un resultat non null/vide";
 }
@@ -43,12 +53,6 @@ TEST(HaversineCoreTestTest, CheckReturnNotNull){
 TEST(HaversineCoreTest, CheckNotReturnInfiniteValue){
     double result = geocalcul::haversine_core(50.0);
     EXPECT_TRUE(std::isfinite(result))  << "La fonction devrait retourner resultat fini";
-}
-
-TEST(HaversineCoreTest, CheckReturnDouble) {
-    using ReturnType = decltype(geocalcul::haversine_core(50.0));
-    bool isDouble = std::is_same<ReturnType, double>::value;
-    EXPECT_TRUE(isDouble) << "La fonction devrait retourner un double";
 }
 
 TEST(HaversineCoreTest, CheckReturnGreatResult){
@@ -59,7 +63,24 @@ TEST(HaversineCoreTest, CheckReturnGreatResult){
 }
 
 // ---------------------------------------------------------------------
+// A sans doute décaler dans plusieurs fichier séparer, c'est plus long que prévu en découpant tout pas oublier
+static_assert(std::is_same_v<decltype(geocalcul::haversine_soustraction(0.0, 0.0)), double>);
 
+TEST(HaversineSoustractionTest, CheckReturnNotNull){
+    double result = geocalcul::haversine_soustraction(0.0, 0.0);
+    EXPECT_TRUE(!std::isnan(result)) << "La fonction devrait retourner un resultat non null/vide";
+}
+
+TEST(HaversineSoustractionTest, CheckNotReturnInfiniteValue){
+    double result = geocalcul::haversine_soustraction(0.0, 0.0);
+    EXPECT_TRUE(std::isfinite(result))  << "La fonction devrait retourner resultat fini";
+}
+
+
+TEST(HaversineSoustractionTest, CheckReturnGreatResult){
+    double result = geocalcul::haversine_soustraction(50.0,30.0);
+    EXPECT_EQ(result, 20.0) << "La fonction devrait retourner 20.0";
+}
 
 
 //---------------------------------------------------------------------

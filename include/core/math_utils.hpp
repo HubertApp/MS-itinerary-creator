@@ -21,7 +21,7 @@ namespace geocalcul {
     }
 
     [[nodiscard]] constexpr double haversine_soustraction(double l1, double l2){
-        return 3.14;
+        return l1-l2;
     }
 
     [[nodiscard]] constexpr double haversine_angular_calcul(){
