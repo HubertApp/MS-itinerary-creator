@@ -23,9 +23,14 @@ namespace geocalcul {
     //     return 3.14;
     // }
 
-    // [[nodiscard]] double haversine_core(double delta) {
-    //     return 3.14;
-    // }
+    [[nodiscard]] double hav(double delta) {
+        double sin = std::sin(delta/2.0);
+        return sin * sin ;
+    }
+
+    [[nodiscard]] double haversine_angular_calcul() {
+        return 3.14;
+    }
 
     [[nodiscard]] double haversine(double lat1, double lon1, double lat2, double lon2) { 
         return 3.14; 

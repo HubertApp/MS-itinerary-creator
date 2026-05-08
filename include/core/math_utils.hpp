@@ -9,24 +9,23 @@ namespace geocalcul {
     constexpr double RADIUS_EARTH = 6371.0;
 
     // Pour conversion degrés en radiant pour les calculs trigo a répétition et chiant
+    // Conversion latitude longitude d'un plan 2d à une l'échelle sphérique proche de celle de la terre
     [[nodiscard]] constexpr double to_radians(double degrees){
         double resultRadiant = degrees * (std::numbers::pi/180.0);
         return resultRadiant;
     }
 
-    // Petit rappel c'est pour le gros calcul sin²(Δ / 2) que je fais cette fonction
-    [[nodiscard]] constexpr double haversine_core(double delta) {
-        double resultSinus = std::sin(delta/2.0);
-        return resultSinus * resultSinus;
-    }
+    // Petit rappel sin²(Δ / 2) (mathématique hav)
+    [[nodiscard]] double hav(double delta);
 
+    
+
+    // Overkill, J'aurais pas du faire cette fonction, a voir si je la garde
     [[nodiscard]] constexpr double haversine_soustraction(double l1, double l2){
         return l1-l2;
     }
 
-    [[nodiscard]] constexpr double haversine_angular_calcul(){
-        return 3.14;
-    }
+    [[nodiscard]] double haversine_angular_calcul();
     
     [[nodiscard]] double haversine(double lat1, double lon1, double lat2, double lon2);
 

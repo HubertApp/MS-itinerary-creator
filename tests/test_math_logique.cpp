@@ -6,7 +6,8 @@
 // A supprimer juste pour tester comment les test fonctionne avec google test
 int add(int a, int b) { return a + b; }
 
-
+// ---------------------------------------------------------------------
+// A sans doute décaler dans plusieurs fichier séparer, c'est plus long que prévu en découpant tout pas oublier
 
 
 TEST(HelloWorldTest, BasicAssertion) { EXPECT_EQ(add(1, 1), 2); }
@@ -41,29 +42,33 @@ TEST(HaversineToRadiansTest, ZeroAndNegative) {
     EXPECT_NEAR(geocalcul::to_radians(-90.0), -1.570796, 1e-6);
 }
 
+
 // ----------------------------------------------------------------------
 
-static_assert(std::is_same_v<decltype(geocalcul::haversine_core(0.0)), double>);
-
 TEST(HaversineCoreTest, CheckReturnNotNull){
-    double result = geocalcul::haversine_core(50.0);
+    double result = geocalcul::hav(50.0);
     EXPECT_TRUE(!std::isnan(result)) << "La fonction devrait retourner un resultat non null/vide";
 }
 
 TEST(HaversineCoreTest, CheckNotReturnInfiniteValue){
-    double result = geocalcul::haversine_core(50.0);
+    double result = geocalcul::hav(50.0);
     EXPECT_TRUE(std::isfinite(result))  << "La fonction devrait retourner resultat fini";
+}
+
+TEST(HaversineCoreTest, CheckReturnDouble) {
+    using ReturnType = decltype(geocalcul::hav(50.0));
+    bool isDouble = std::is_same<ReturnType, double>::value;
+    EXPECT_TRUE(isDouble) << "La fonction devrait retourner un double";
 }
 
 TEST(HaversineCoreTest, CheckReturnGreatResult){
     double radian = geocalcul::to_radians(90.0);
-    double result = geocalcul::haversine_core(radian);
+    double result = geocalcul::hav(radian);
     ASSERT_TRUE(std::isfinite(result));
-    EXPECT_NEAR(result, 0.5, 1e-9);
+    EXPECT_NEAR(result, 0.5, 1e-9) << "La fonction devrait retourner un double";
 }
 
-// ---------------------------------------------------------------------
-// A sans doute décaler dans plusieurs fichier séparer, c'est plus long que prévu en découpant tout pas oublier
+
 static_assert(std::is_same_v<decltype(geocalcul::haversine_soustraction(0.0, 0.0)), double>);
 
 TEST(HaversineSoustractionTest, CheckReturnNotNull){
@@ -84,8 +89,6 @@ TEST(HaversineSoustractionTest, CheckReturnGreatResult){
 
 
 //---------------------------------------------------------------------
-
-// static_assert(std::is_same_v<decltype(geocalcul::to_radians(0.0)), double>);
 
 TEST(HaversineTest, CheckReturnNotNull){
     double result = geocalcul::haversine(0.0, 0.0, 0.0, 0.0);
