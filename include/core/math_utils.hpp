@@ -25,7 +25,7 @@ namespace geocalcul {
 
     [[nodiscard]] double haversine_param(double lat_rad, double lon_rad, double dlat_rad, double dlon_rad);
 
-    [[nodiscard]] double haversine_angular_calcul();
+    [[nodiscard]] double haversine_angular_calcul(double param);
     
     [[nodiscard]] double haversine(double lat1, double lon1, double lat2, double lon2);
 

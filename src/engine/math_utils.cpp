@@ -29,12 +29,13 @@ namespace geocalcul {
     }
 
     [[nodiscard]] double haversine_param(double lat_rad, double lon_rad, double dlat_rad, double dlon_rad){
-        double a = hav(dlat_rad) + std::cos(lat_rad)*std::cos(lon_rad) * hav(dlon_rad);
-        return a;
+        double p = hav(dlat_rad) + std::cos(lat_rad)*std::cos(lon_rad) * hav(dlon_rad);
+        return p;
     }
 
-    [[nodiscard]] double haversine_angular_calcul() {
-        return 3.14;
+    [[nodiscard]] double haversine_angular_calcul(double param) {
+        double a = 2.0 * std::atan2(std::sqrt(param), std::sqrt(1.0-param));
+        return a;
     }
 
     [[nodiscard]] double haversine(double lat1, double lon1, double lat2, double lon2) { 

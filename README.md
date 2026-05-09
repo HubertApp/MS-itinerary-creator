@@ -5,6 +5,14 @@ https://blog.frankel.ch/imperative-functional-programming/4/
 https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
 https://google.github.io/styleguide/cppguide.html
 
+Débat sur l'utilisation ou non du noexpect pour améliorer performance :
+https://www.w3tutorials.net/blog/how-to-use-noexcept-in-c-or-how-does-it-work/
+https://stackoverflow.com/questions/31826218/noexcept-practice-for-style-and-performance
+https://news.ycombinator.com/item?id=41163083
+
+Finalement la performance de l'ajout de noexpect semble négligeable donc bon et dans le pire des cas c'est l'inverse le coût 
+est élevé, on va évite de l'utiliser
+
 Branchless éviter misprediction
 (retrouver lien docs intel)
 

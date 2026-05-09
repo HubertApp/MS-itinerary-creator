@@ -92,10 +92,45 @@ TEST(HaversineParamTest, CheckReturnOneNorthToSouthPole)
     EXPECT_NEAR(geocalcul::haversine_param(lat, -lon, dlat, 0.0), 1.0, 1e-9);
 }
 
-
-
-
 // ----------------------------------------------------------------------
+
+TEST(HaversineAngularCalculTest, CheckReturnNotNull){
+    double result = geocalcul::haversine_angular_calcul(1.0);
+    EXPECT_TRUE(!std::isnan(result)) << "La fonction devrait retourner un resultat non null/vide";
+}
+
+TEST(HaversineAngularCalculTest, CheckNotReturnInfiniteValue){
+    double result = geocalcul::haversine_angular_calcul(1.0);
+    EXPECT_TRUE(std::isfinite(result))  << "La fonction devrait retourner resultat fini";
+}
+
+TEST(HaversineAngularCalculTest, CheckReturnDouble) {
+    using ReturnType = decltype(geocalcul::haversine_angular_calcul(1.0));
+    bool isDouble = std::is_same<ReturnType, double>::value;
+    EXPECT_TRUE(isDouble) << "La fonction devrait retourner un double";
+}
+
+TEST(HaversineAngularCalculTest, CheckReturnGreatResult)
+{
+    double pi = std::numbers::pi;
+    double param = 0.5;
+    EXPECT_NEAR(geocalcul::haversine_angular_calcul(param), pi/2, 1e-9);
+}
+
+TEST(HaversineAngularCalculTest, CheckReturnPiWithParamOne){
+    double pi = std::numbers::pi;
+    double param = 1.0;
+
+    EXPECT_NEAR(geocalcul::haversine_angular_calcul(param), pi, 1e-9);
+}
+
+TEST(HaversineAngularCalculTest, CheckReturnPiWithParamZeroSamePoint){
+    double param = 0.0;
+
+    EXPECT_NEAR(geocalcul::haversine_angular_calcul(param), 0.0, 1e-9);
+}
+
+//-----------------------------------------------------------------------
 
 TEST(HaversineCoreTest, CheckReturnNotNull){
     double result = geocalcul::hav(50.0);
