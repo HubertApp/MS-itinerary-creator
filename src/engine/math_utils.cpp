@@ -4,25 +4,6 @@
 
 namespace geocalcul {
 
-    // Exemple en js repris dans un autre projet c++, a diviser en plusieurs fonction pure, c'est indigeste la
-    // const R = 6371e3; // metres
-    // const φ1 = lat1 * Math.PI/180; // φ, λ in radians
-    // const φ2 = lat2 * Math.PI/180;
-    // const Δφ = (lat2-lat1) * Math.PI/180;
-    // const Δλ = (lon2-lon1) * Math.PI/180;
-
-    // const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-    //         Math.cos(φ1) * Math.cos(φ2) *
-    //         Math.sin(Δλ/2) * Math.sin(Δλ/2);
-    // const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-    // const d = R * c; // in metres
-
-    
-    // [[nodiscard]] constexpr double to_radians(double degrees) {
-    //     return 3.14;
-    // }
-
     [[nodiscard]] double hav(double delta) {
         double sin = std::sin(delta/2.0);
         return sin * sin ;
@@ -38,7 +19,34 @@ namespace geocalcul {
         return a;
     }
 
+    // Exemple en js repris dans un autre projet c++, a diviser en plusieurs fonction pure, c'est indigeste la
+    // const R = 6371e3; // metres
+    // const φ1 = lat1 * Math.PI/180; // φ, λ in radians
+    // const φ2 = lat2 * Math.PI/180;
+    // const Δφ = (lat2-lat1) * Math.PI/180;
+    // const Δλ = (lon2-lon1) * Math.PI/180;
+
+    // const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+    //         Math.cos(φ1) * Math.cos(φ2) *
+    //         Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    // const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    // const d = R * c; // in metres
+
     [[nodiscard]] double haversine(double lat1, double lon1, double lat2, double lon2) { 
-        return 3.14; 
+        
+        double radLat1 = geocalcul::to_radians(lat1);
+        double radLat2 = geocalcul::to_radians(lat2);
+
+        double dratLat = geocalcul::to_radians(geocalcul::haversine_soustraction(lat2,lat1));
+        double dratLon = geocalcul::to_radians(geocalcul::haversine_soustraction(lon2,lon1));
+
+        double param = geocalcul::haversine_param(radLat1,radLat2,dratLat,dratLon);
+
+        double angularCalcul = geocalcul::haversine_angular_calcul(param);
+
+        double distance = geocalcul::RADIUS_EARTH * angularCalcul;
+
+        return distance; 
     }
 }

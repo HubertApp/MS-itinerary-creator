@@ -176,7 +176,6 @@ TEST(HaversineSoustractionTest, CheckReturnGreatResult){
     EXPECT_EQ(result, 20.0) << "La fonction devrait retourner 20.0";
 }
 
-
 //---------------------------------------------------------------------
 
 TEST(HaversineTest, CheckReturnNotNull){
@@ -195,7 +194,57 @@ TEST(HaversineTest, CheckReturnDouble) {
     EXPECT_TRUE(isDouble) << "La fonction devrait retourner un double";
 }
 
+TEST(HaversineTest, CheckReturnGreatResult){
+    double lat1 = 49.10600415081308 ;
+    double lon1 = 6.182594836092145 ;
+
+    double lat2 = 49.10995796261632;
+    double lon2 = 6.177141075227262; 
+
+    double result = geocalcul::haversine(lat1,lon1,lat2,lon2);
+
+    ASSERT_TRUE(std::isfinite(result));
+    EXPECT_NEAR(result, 0.59235843356499385, 1e-9) << "La fonction devrait retourner un double";
+
+}
+
+TEST(HaversineTest, CheckReturnZeroWithSamePoint){
+    double lat1 = 49.10600415081308 ;
+    double lon1 = 6.182594836092145 ;
 
 
+    double result = geocalcul::haversine(lat1,lon1,lat1,lon1);
+
+    ASSERT_TRUE(std::isfinite(result));
+    EXPECT_NEAR(result, 0.0, 1e-9) << "La fonction devrait retourner un 0";
+}
+
+TEST(HaversineTest, CheckReturnInverseSymetricPointAR){
+    double lat1 = 49.10600415081308 ;
+    double lon1 = 6.182594836092145 ;
+
+    double lat2 = 6.182594836092145;
+    double lon2 = 49.10600415081308;
+
+    double result = geocalcul::haversine(lat1,lon1,lat2,lon2);
+    double resultSymetric = geocalcul :: haversine(lat2,lon2,lat1,lon1);
+
+    ASSERT_TRUE(std::isfinite(result));
+    ASSERT_TRUE(std::isfinite(resultSymetric));
+
+    EXPECT_NEAR(result, resultSymetric, 1e-9) << "La fonction devrait retourner une distance indentique sur un trajet aller-retour";
+}
 
 
+TEST(HaversineTest, CheckReturnPiAtAntiPodalPoint){
+    double lat1 = 0.0 ;
+    double lon1 = 0.0 ;
+
+    double lat2 = 0.0 ;
+    double lon2 = 180.0 ;
+
+    double result = geocalcul::haversine(lat1,lon1,lat2,lon2);
+
+    ASSERT_TRUE(std::isfinite(result));
+    EXPECT_NEAR(result, std::numbers::pi * geocalcul::RADIUS_EARTH, 1.0) << "La fonction devrait retourner une distance indentique sur un trajet aller-retour";
+}

@@ -23,6 +23,7 @@ namespace geocalcul {
         return l1-l2;
     }
 
+    // Petit rappel fonction complète hav + b*hav
     [[nodiscard]] double haversine_param(double lat_rad, double lon_rad, double dlat_rad, double dlon_rad);
 
     [[nodiscard]] double haversine_angular_calcul(double param);
