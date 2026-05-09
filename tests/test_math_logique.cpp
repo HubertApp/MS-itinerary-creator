@@ -4,21 +4,6 @@
 #include <numbers>
 #include <type_traits>
 
-// A supprimer juste pour tester comment les test fonctionne avec google test
-int add(int a, int b) { return a + b; }
-
-// ---------------------------------------------------------------------
-// A sans doute décaler dans plusieurs fichier séparer, c'est plus long que
-// prévu en découpant tout pas oublier
-
-TEST(HelloWorldTest, BasicAssertion) { EXPECT_EQ(add(1, 1), 2); }
-
-TEST(HelloWorldTest, StringCheck) {
-  std::string hello = "Hello";
-  EXPECT_EQ(hello, "Hello");
-}
-
-// A pas oublier a l'occasion de mocker une donnée unique
 
 static_assert(std::is_same_v<decltype(geocalcul::to_radians(0.0)), double>);
 
@@ -158,28 +143,6 @@ TEST(HaversineCoreTest, CheckReturnGreatResult) {
   double result = geocalcul::hav(radian);
   ASSERT_TRUE(std::isfinite(result));
   EXPECT_NEAR(result, 0.5, 1e-9) << "La fonction devrait retourner un double";
-}
-
-// ----------------------------------------------------------------------
-
-static_assert(std::is_same_v<
-              decltype(geocalcul::haversine_soustraction(0.0, 0.0)), double>);
-
-TEST(HaversineSoustractionTest, CheckReturnNotNull) {
-  double result = geocalcul::haversine_soustraction(0.0, 0.0);
-  EXPECT_TRUE(!std::isnan(result))
-      << "La fonction devrait retourner un resultat non null/vide";
-}
-
-TEST(HaversineSoustractionTest, CheckNotReturnInfiniteValue) {
-  double result = geocalcul::haversine_soustraction(0.0, 0.0);
-  EXPECT_TRUE(std::isfinite(result))
-      << "La fonction devrait retourner resultat fini";
-}
-
-TEST(HaversineSoustractionTest, CheckReturnGreatResult) {
-  double result = geocalcul::haversine_soustraction(50.0, 30.0);
-  EXPECT_EQ(result, 20.0) << "La fonction devrait retourner 20.0";
 }
 
 //---------------------------------------------------------------------

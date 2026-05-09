@@ -17,8 +17,6 @@ Branchless éviter misprediction
 (retrouver lien docs intel)
 
 
-
-
 # MS-itinerary-creator
 Microservice de calcul d'itinéraire en C++ via l'algorithme de A* avec heurisitique de Haversine.
 
@@ -37,7 +35,7 @@ Elle a été choisie pour plusieurs raisons, notamment pour sa capacité à faci
 
 # Outils et framework
 
-Test unitaire : Framework catch 2
+Test unitaire : GoogleTest
 Communication : gRPC
 
 
