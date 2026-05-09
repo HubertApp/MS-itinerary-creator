@@ -16,14 +16,14 @@ namespace geocalcul {
     }
 
     // Petit rappel sin²(Δ / 2) (mathématique hav)
-    [[nodiscard]] double hav(double delta);
-
-    
+    [[nodiscard]] double hav(double delta);    
 
     // Overkill, J'aurais pas du faire cette fonction, a voir si je la garde
     [[nodiscard]] constexpr double haversine_soustraction(double l1, double l2){
         return l1-l2;
     }
+
+    [[nodiscard]] double haversine_param(double lat_rad, double lon_rad, double dlat_rad, double dlon_rad);
 
     [[nodiscard]] double haversine_angular_calcul();
     

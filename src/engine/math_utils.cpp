@@ -28,6 +28,11 @@ namespace geocalcul {
         return sin * sin ;
     }
 
+    [[nodiscard]] double haversine_param(double lat_rad, double lon_rad, double dlat_rad, double dlon_rad){
+        double a = hav(dlat_rad) + std::cos(lat_rad)*std::cos(lon_rad) * hav(dlon_rad);
+        return a;
+    }
+
     [[nodiscard]] double haversine_angular_calcul() {
         return 3.14;
     }

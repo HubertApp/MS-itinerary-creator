@@ -57,3 +57,5 @@ Finalement utilisation de google Test pour les test unitaires beaucoup plus comp
 ## Rappel développement
 
 Vérifier que la division de l'haversine en fonction pur marche bien
+
+Lancer le linter pour chaque fichier récursivement : find . -iname "*.cpp" -o -iname "*.hpp" | xargs clang-format -i

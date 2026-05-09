@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <cmath>
+#include <numbers>
 #include <type_traits>
 #include "core/math_utils.hpp"
 
@@ -42,6 +43,57 @@ TEST(HaversineToRadiansTest, ZeroAndNegative) {
     EXPECT_NEAR(geocalcul::to_radians(-90.0), -1.570796, 1e-6);
 }
 
+// --------------------------------------------------------------------
+
+TEST(HaversineParamTest, CheckReturnNotNull){
+    double result = geocalcul::haversine_param(1.0,1.0,1.0,1.0);
+    EXPECT_TRUE(!std::isnan(result)) << "La fonction devrait retourner un resultat non null/vide";
+}
+
+TEST(HaversineParamTest, CheckNotReturnInfiniteValue){
+    double result = geocalcul::haversine_param(1.0,1.0,1.0,1.0);
+    EXPECT_TRUE(std::isfinite(result))  << "La fonction devrait retourner resultat fini";
+}
+
+TEST(HaversineParamTest, CheckReturnDouble) {
+    using ReturnType = decltype(geocalcul::haversine_param(1.0,1.0,1.0,1.0));
+    bool isDouble = std::is_same<ReturnType, double>::value;
+    EXPECT_TRUE(isDouble) << "La fonction devrait retourner un double";
+}
+
+TEST(HaversineParamTest, CheckReturnGreatResult)
+{
+    double pi = std::numbers::pi;
+    double lat = pi/6;
+    double lon = pi/3;
+
+    double dlat = pi/6;
+    double dlon = pi/4;
+
+    EXPECT_NEAR(geocalcul::haversine_param(lat, lon, dlat, dlon), 0.13040054012994173, 1e-9);
+}
+
+TEST(HaversineParamTest, CheckReturnZeroSamePoint)
+{
+    double pi = std::numbers::pi;
+    double lat = pi/4;
+    double lon = pi/4;
+    
+    EXPECT_NEAR(geocalcul::haversine_param(lat, lon, 0.0, 0.0), 0.0, 1e-9);
+}
+
+TEST(HaversineParamTest, CheckReturnOneNorthToSouthPole)
+{
+    double pi = std::numbers::pi;
+    double lat = pi/2;
+    double lon = -pi/2;
+    double dlat = -pi;
+
+    EXPECT_NEAR(geocalcul::haversine_param(lat, -lon, dlat, 0.0), 1.0, 1e-9);
+}
+
+
+
 
 // ----------------------------------------------------------------------
 
@@ -67,6 +119,8 @@ TEST(HaversineCoreTest, CheckReturnGreatResult){
     ASSERT_TRUE(std::isfinite(result));
     EXPECT_NEAR(result, 0.5, 1e-9) << "La fonction devrait retourner un double";
 }
+
+// ----------------------------------------------------------------------
 
 
 static_assert(std::is_same_v<decltype(geocalcul::haversine_soustraction(0.0, 0.0)), double>);
