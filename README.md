@@ -2,6 +2,17 @@
 https://ssciwr.github.io/guidelines/cpp/
 https://blog.frankel.ch/imperative-functional-programming/4/
 
+https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+https://google.github.io/styleguide/cppguide.html
+
+Débat sur l'utilisation ou non du noexpect pour améliorer performance :
+https://www.w3tutorials.net/blog/how-to-use-noexcept-in-c-or-how-does-it-work/
+https://stackoverflow.com/questions/31826218/noexcept-practice-for-style-and-performance
+https://news.ycombinator.com/item?id=41163083
+
+Finalement la performance de l'ajout de noexpect semble négligeable donc bon et dans le pire des cas c'est l'inverse le coût 
+est élevé, on va évite de l'utiliser
+
 Branchless éviter misprediction
 (retrouver lien docs intel)
 
@@ -47,3 +58,12 @@ Via Docker :
 https://www.reddit.com/r/cpp_questions/comments/sobl57/how_to_unit_test/?tl=fr
 https://github.com/catchorg/Catch2
 
+Finalement utilisation de google Test pour les test unitaires beaucoup plus compréhensible que la syntaxe de catch2 
+
+
+
+## Rappel développement
+
+Vérifier que la division de l'haversine en fonction pur marche bien
+
+Lancer le linter pour chaque fichier récursivement : find . -iname "*.cpp" -o -iname "*.hpp" | xargs clang-format -i

@@ -16,8 +16,10 @@ FetchContent_MakeAvailable(googletest)
 
 add_library(astar_engine 
     src/engine/math_utils.cpp
+    include/core/math_utils.hpp
+    
 )
-target_include_directories(astar_engine PUBLIC src/engine)
+target_include_directories(astar_engine PUBLIC src/engine include)
 
 add_executable(unit_tests 
     tests/test_math_logique.cpp
