@@ -2,6 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <numbers>
+#include <optional>
 
 namespace astar {
 
@@ -16,6 +17,15 @@ namespace astar {
             g.adjacency[from_id].push_back(Edge{to_id, weight});
         }
         return g;
+    }
+
+    std::optional<Node> find_node(const Graph graph, const std::string node_id){
+        for (const auto [id, node] : graph.nodes){
+            if (id == node_id){
+                return node;
+            }
+        }
+        return std::nullopt;
     }
 
 }

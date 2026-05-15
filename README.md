@@ -1,4 +1,4 @@
-# Guidelines
+# Guidelines et ressources
 https://ssciwr.github.io/guidelines/cpp/
 https://blog.frankel.ch/imperative-functional-programming/4/
 
@@ -11,8 +11,11 @@ https://stackoverflow.com/questions/31826218/noexcept-practice-for-style-and-per
 https://news.ycombinator.com/item?id=41163083
 
 https://learn.microsoft.com/fr-fr/cpp/cpp/auto-cpp?view=msvc-170
+https://en.cppreference.com/cpp/utility/optional
 
 https://stackoverflow.com/questions/1943276/what-does-do-in-a-c-declaration
+https://www.reddit.com/r/learnprogramming/comments/92hzaa/c_initial_value_of_reference_to_nonconst_must_be/
+
 
 Finalement la performance de l'ajout de noexpect semble négligeable donc bon et dans le pire des cas c'est l'inverse le coût 
 est élevé, on va évite de l'utiliser
