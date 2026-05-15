@@ -3,6 +3,7 @@
 #include <vector>
 #include <numbers>
 #include <optional>
+#include <iostream>
 
 namespace astar {
 
@@ -27,5 +28,19 @@ namespace astar {
         }
         return std::nullopt;
     }
+
+    std::optional<std::vector<Edge>> find_neighbors(const Graph& graph, const std::string& node_id)
+    {
+        for (const auto& [id, neighbors] : graph.adjacency) {
+            if (id == node_id) {
+                // for(const auto edge : neighbors){
+                //     std::cout << "Edge to " << edge.to_id << " with weight " << edge.weight;
+                // }
+                return neighbors;
+            }
+        }
+        return std::nullopt;
+    }
+
 
 }
