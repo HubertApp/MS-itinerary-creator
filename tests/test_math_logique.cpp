@@ -7,6 +7,8 @@
 
 static_assert(std::is_same_v<decltype(geocalcul::to_radians(0.0)), double>);
 
+double pi = std::numbers::pi;
+
 TEST(HaversineToRadiansTest, CheckReturnNotNull) {
   double result = geocalcul::to_radians(50.0);
   EXPECT_TRUE(!std::isnan(result))
@@ -22,7 +24,7 @@ TEST(HaversineToRadiansTest, CheckNotReturnInfiniteValue) {
 TEST(HaversineToRadiansTest, CheckReturnGreatResult) {
   double result = geocalcul::to_radians(180.0);
   ASSERT_TRUE(std::isfinite(result));
-  EXPECT_NEAR(result, M_PI, 1e-9);
+  EXPECT_NEAR(result, pi, 1e-9);
 }
 
 TEST(HaversineToRadiansTest, ZeroAndNegative) {

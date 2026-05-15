@@ -7,20 +7,20 @@ namespace geocalcul {
 
 constexpr double RADIUS_EARTH = 6371.0;
 
-[[nodiscard]] constexpr double to_radians(double degrees) {
+[[nodiscard]] constexpr double to_radians(const double degrees) {
   const auto resultRadiant = degrees * (std::numbers::pi / 180.0);
   return resultRadiant;
 }
 
-[[nodiscard]] double hav(double delta);
+[[nodiscard]] double hav(const double delta);
 
-[[nodiscard]] double haversine_param(double lat_rad, double lon_rad,
-                                     double dlat_rad, double dlon_rad);
+[[nodiscard]] double haversine_param(const double lat_rad, const double lon_rad,
+                                     const double dlat_rad, const double dlon_rad);
 
 [[nodiscard]] double haversine_angular_calcul(double param);
 
-[[nodiscard]] double haversine(double lat1, double lon1, double lat2,
-                               double lon2);
+[[nodiscard]] double haversine(const double lat1, const double lon1, const double lat2,
+                               const double lon2);
 
 } // namespace geocalcul
 

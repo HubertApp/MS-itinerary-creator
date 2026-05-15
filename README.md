@@ -10,6 +10,10 @@ https://www.w3tutorials.net/blog/how-to-use-noexcept-in-c-or-how-does-it-work/
 https://stackoverflow.com/questions/31826218/noexcept-practice-for-style-and-performance
 https://news.ycombinator.com/item?id=41163083
 
+https://learn.microsoft.com/fr-fr/cpp/cpp/auto-cpp?view=msvc-170
+
+https://stackoverflow.com/questions/1943276/what-does-do-in-a-c-declaration
+
 Finalement la performance de l'ajout de noexpect semble négligeable donc bon et dans le pire des cas c'est l'inverse le coût 
 est élevé, on va évite de l'utiliser
 
