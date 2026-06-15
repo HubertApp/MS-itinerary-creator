@@ -11,8 +11,8 @@
 namespace astar {
 
     MinHeap pq_push(MinHeap pq, PQNode node){
-        if(node.f_score <= 0 ){
-            throw BadValueException("ErrorIllegalValue BadValueException : Score inférieur ou égal à Zéro");
+        if(node.f_score < 0 ){
+            throw BadValueException("ErrorIllegalValue BadValueException : Score inférieur à Zéro");
         }
 
         pq.push(node);

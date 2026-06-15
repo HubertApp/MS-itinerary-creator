@@ -22,7 +22,9 @@ double heuristic_haversine(const std::string from_id,
                            const std::string to_id,
                            const Graph graph);
 
-double heuristic_zero(const std::string, const std::string, const Graph);
+inline double heuristic_zero(const std::string from, const std::string to, const Graph graph) {
+        return 0.0;
+    }
 
 std::vector<std::string> reconstruct_path(
     const std::unordered_map<std::string, std::string> came_from,

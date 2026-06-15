@@ -80,21 +80,14 @@ TEST(PriorityQueueTestPushPq, CheckPreservPriorityOrderAfterInsertionSameValue) 
     EXPECT_EQ(g2.top().id, "noeud_A");
 }
 
-TEST_P(PriorityQueueBadValueTest, CheckThrowExceptionAfterInsertBadValue) {
+TEST(PriorityQueueTest, CheckThrowExceptionAfterInsertBadValue) {
     astar::MinHeap pq;
     astar::PQNode node;
-    node.f_score = 0;
+    node.f_score = -3;
     node.id = "noeud_A";
 
     EXPECT_THROW(astar::pq_push(pq, node), astar::BadValueException);
 }
-
-//Pour "mocker" une liste de valeur, a vérifier si c'est la bonne manière
-INSTANTIATE_TEST_SUITE_P(
-    InvalidScores,
-    PriorityQueueBadValueTest,
-    ::testing::Values(0.0, -1.0, -42.5, -0.0001)
-);
 
 
 TEST(PriorityQueueTest, CheckIdValidity) {
