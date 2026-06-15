@@ -8,8 +8,8 @@
 namespace astar {
 
     Graph parse_graph(
-        const std::vector<std::tuple<std::string, double, double>>& nodes,
-        const std::vector<std::tuple<std::string, std::string, double>>& edges) {
+        const std::vector<std::tuple<std::string, double, double>> nodes,
+        const std::vector<std::tuple<std::string, std::string, double>> edges) {
         Graph g;
         for (const auto [id, lat, lon] : nodes){
             g.nodes[id] = Node{id, lat, lon};
@@ -29,12 +29,12 @@ namespace astar {
         return std::nullopt;
     }
 
-    std::optional<std::vector<Edge>> find_neighbors(const Graph& graph, const std::string& node_id)
+    std::optional<std::vector<Edge>> find_neighbors(const Graph graph, const std::string node_id)
     {
-        for (const auto& [id, neighbors] : graph.adjacency) {
+        for (const auto [id, neighbors] : graph.adjacency) {
             if (id == node_id) {
                 // for(const auto edge : neighbors){
-                //     std::cout << "Edge to " << edge.to_id << " with weight " << edge.weight;
+                //     std::cout << "AAAA : Edge to : " << edge.to_id << " weight : " << edge.weight;
                 // }
                 return neighbors;
             }

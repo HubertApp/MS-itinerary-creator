@@ -27,10 +27,10 @@ namespace astar {
 
 
     Graph parse_graph(
-        const std::vector<std::tuple<std::string, double, double>>& nodes,
-        const std::vector<std::tuple<std::string, std::string, double>>& edges);
+        const std::vector<std::tuple<std::string, double, double>> nodes,
+        const std::vector<std::tuple<std::string, std::string, double>> edges);
 
     std::optional<Node> find_node(const Graph graph, const std::string node_id);
-    std::optional<std::vector<Edge>> find_neighbors(const Graph& g, const std::string& node_id);
+    std::optional<std::vector<Edge>> find_neighbors(const Graph g, const std::string node_id);
 
 }

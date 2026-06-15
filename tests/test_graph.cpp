@@ -96,3 +96,16 @@ TEST(GraphTestFindNeighbors, CheckReturnGreatValuesWhenSearchExistingNodeCompare
     EXPECT_FALSE(n->at(0).to_id == "C");
     
 }
+
+TEST(GraphTest, NeighborsExist) {
+    auto g  = astar::parse_graph(two_nodes(),{{"A","B",100.0}});
+    auto nb = astar::find_neighbors(g,"A");
+    ASSERT_TRUE(nb.has_value());
+    EXPECT_EQ(nb->at(0).to_id,"B");
+    EXPECT_DOUBLE_EQ(nb->at(0).weight,100.0);
+}
+
+TEST(GraphTest, NeighborsMissing) {
+    auto g = astar::parse_graph(two_nodes(),{{"A","B",100.0}});
+    EXPECT_FALSE(astar::find_neighbors(g,"Z").has_value());
+}
