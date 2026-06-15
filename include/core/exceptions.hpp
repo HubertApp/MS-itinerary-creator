@@ -10,5 +10,17 @@ namespace astar {
             : std::runtime_error(msg) {}
     };
 
+    class NodeNotExistException : public std::runtime_error {
+    public:
+        explicit NodeNotExistException(const std::string msg) 
+            : std::runtime_error(msg) {}
+    };
+
+    class EmptyPqException : public std::runtime_error {
+    public:
+        explicit EmptyPqException(const std::string msg) 
+            : std::runtime_error(msg) {}
+    };
+
 
 }

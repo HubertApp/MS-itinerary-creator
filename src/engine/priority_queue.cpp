@@ -18,5 +18,17 @@ namespace astar {
         pq.push(node);
         return pq;
     }
+
+    std::pair<PQNode, MinHeap> pq_pop(MinHeap pq)
+    {
+        if(pq.empty()){
+            throw EmptyPqException("EmptyPriorityQueueException : Aucune valeur dans la priority queue");
+        }
+
+        PQNode top = pq.top();
+        pq.pop();
+        return {top, pq};
+    }
+
     
 }
