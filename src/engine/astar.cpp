@@ -22,5 +22,14 @@ namespace astar {
             return reconstruct_path(came_from, it->second, std::move(acc));
         }
 
+     double heuristic_haversine(const std::string from_id,
+                           const std::string to_id,
+                           const Graph graph)
+        {
+            auto from = find_node(graph, from_id);
+            auto to   = find_node(graph, to_id);
+            if (!from || !to) return 0.0;
+            return geocalcul::haversine(from->lat, from->lon, to->lat, to->lon);
+        }
     
 }

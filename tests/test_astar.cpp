@@ -40,3 +40,21 @@ TEST_F(AStarTest,  CheckReconstructPathIncompletePathReturnAtFirstOrigin){
 
     EXPECT_EQ(result, std::vector<std::string>({"B", "C", "D"}));
 }
+
+
+TEST_F(AStarTest,  CheckHeuristicHaversineWithSamePointFromTo){
+    auto result = astar::heuristic_haversine("A", "A", g);
+    EXPECT_EQ(result, 0.0);
+}
+
+TEST_F(AStarTest,  CheckHeuristicHaversineReturnGreatValue){
+    astar::Graph geo_g;
+
+    geo_g.nodes["A"] = astar::Node{"A", 49.10600415081308, 6.182594836092145};
+    geo_g.nodes["B"] = astar::Node{"B", 49.10995796261632, 6.177141075227262};
+    
+    auto result = astar::heuristic_haversine("A", "B", geo_g);
+    EXPECT_NEAR(result, 0.59235843356499385, 1e-9)
+      << "La fonction devrait retourner un double";
+}
+
