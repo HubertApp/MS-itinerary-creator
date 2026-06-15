@@ -164,3 +164,21 @@ TEST(PriorityQueueTest, CheckThrowExceptionAfterPopEmptyPq) {
     astar::MinHeap pq;
     EXPECT_THROW(astar::pq_pop(pq), astar::EmptyPqException);
 }
+
+
+TEST(PriorityQueueTest, CheckReturnFalseIfNotEmptyPq ) {
+    astar::MinHeap pq;
+    astar::PQNode node;
+    node.f_score = 40;
+    node.id = "noeud_A";
+
+    auto g = astar::pq_push(pq, node);
+
+    EXPECT_FALSE(astar::pq_empty(g));
+
+}
+
+TEST(PriorityQueueTest, CheckReturnTrueIfEmptyPq) {
+    astar::MinHeap pq;
+    EXPECT_TRUE(astar::pq_empty(pq));
+}

@@ -22,7 +22,7 @@ add_library(astar_engine
     src/engine/priority_queue.cpp
     include/core/priority_queue.hpp
     src/engine/astar.cpp
-    include/core/astar.cpp
+    include/core/astar.hpp
 )
 
 target_include_directories(astar_engine PUBLIC src/engine include)
