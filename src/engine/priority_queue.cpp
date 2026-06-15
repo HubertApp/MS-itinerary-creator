@@ -30,5 +30,8 @@ namespace astar {
         return {top, pq};
     }
 
-    
+    bool pq_empty(const MinHeap pq)
+    {
+       return pq.empty();
+    }
 }

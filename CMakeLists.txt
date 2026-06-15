@@ -21,6 +21,8 @@ add_library(astar_engine
     include/core/graph.hpp
     src/engine/priority_queue.cpp
     include/core/priority_queue.hpp
+    src/engine/astar.cpp
+    include/core/astar.cpp
 )
 
 target_include_directories(astar_engine PUBLIC src/engine include)
@@ -29,6 +31,7 @@ add_executable(unit_tests
     tests/test_math_logique.cpp
     tests/test_graph.cpp
     tests/test_priority_queue.cpp
+    tests/test_astar.cpp
 )
 
 target_link_libraries(unit_tests PRIVATE astar_engine gtest_main)
