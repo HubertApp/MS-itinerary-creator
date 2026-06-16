@@ -72,3 +72,8 @@ Finalement utilisation de google Test pour les test unitaires beaucoup plus comp
 Vérifier que la division de l'haversine en fonction pur marche bien
 
 Lancer le linter pour chaque fichier récursivement : find . -iname "*.cpp" -o -iname "*.hpp" | xargs clang-format -i
+
+sudo apt update
+sudo apt install -y libprotobuf-dev protobuf-compiler libgrpc++-dev protobuf-compiler-grpc
+
+sudo apt install gdb
