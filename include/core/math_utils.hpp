@@ -15,12 +15,13 @@ constexpr double RADIUS_EARTH = 6371.0;
 [[nodiscard]] double hav(const double delta);
 
 [[nodiscard]] double haversine_param(const double lat_rad, const double lon_rad,
-                                     const double dlat_rad, const double dlon_rad);
+                                     const double dlat_rad,
+                                     const double dlon_rad);
 
 [[nodiscard]] double haversine_angular_calcul(double param);
 
-[[nodiscard]] double haversine(const double lat1, const double lon1, const double lat2,
-                               const double lon2);
+[[nodiscard]] double haversine(const double lat1, const double lon1,
+                               const double lat2, const double lon2);
 
 } // namespace geocalcul
 

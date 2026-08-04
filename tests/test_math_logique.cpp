@@ -4,7 +4,6 @@
 #include <numbers>
 #include <type_traits>
 
-
 static_assert(std::is_same_v<decltype(geocalcul::to_radians(0.0)), double>);
 
 double pi = std::numbers::pi;

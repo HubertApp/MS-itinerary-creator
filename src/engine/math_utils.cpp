@@ -10,7 +10,8 @@ namespace geocalcul {
 }
 
 [[nodiscard]] double haversine_param(const double lat_rad, const double lon_rad,
-                                     const double dlat_rad, const double dlon_rad) {
+                                     const double dlat_rad,
+                                     const double dlon_rad) {
   const auto p =
       hav(dlat_rad) + std::cos(lat_rad) * std::cos(lon_rad) * hav(dlon_rad);
   return p;
@@ -21,19 +22,17 @@ namespace geocalcul {
   return a;
 }
 
-
-[[nodiscard]] double haversine(const double lat1, const double lon1, const double lat2,
-                               const double lon2) {
+[[nodiscard]] double haversine(const double lat1, const double lon1,
+                               const double lat2, const double lon2) {
 
   const auto radLat1 = geocalcul::to_radians(lat1);
   const auto radLat2 = geocalcul::to_radians(lat2);
 
-  const auto dratLat =
-      geocalcul::to_radians(lat2-lat1);
-  const auto dratLon =
-      geocalcul::to_radians(lon2-lon1);
+  const auto dratLat = geocalcul::to_radians(lat2 - lat1);
+  const auto dratLon = geocalcul::to_radians(lon2 - lon1);
 
-  const auto param = geocalcul::haversine_param(radLat1, radLat2, dratLat, dratLon);
+  const auto param =
+      geocalcul::haversine_param(radLat1, radLat2, dratLat, dratLon);
 
   const auto angularCalcul = geocalcul::haversine_angular_calcul(param);
 
