@@ -1,7 +1,0 @@
-// struct edge () {
-
-// }
-
-// struct node () {
-
-// }

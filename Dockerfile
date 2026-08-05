@@ -1,23 +1,58 @@
-FROM ubuntu:22.04 AS builder
+FROM ubuntu:24.04 AS builder
 
-RUN apt-get update && apt-get install -y \
-    build-essential cmake git curl zip pkg-config ninja-build
+ENV DEBIAN_FRONTEND=noninteractive
 
-WORKDIR /opt
-RUN git clone https://github.com/microsoft/vcpkg.git && \
-    ./vcpkg/bootstrap-vcpkg.sh
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        cmake \
+        g++ \
+        nasm \
+        ninja-build \
+        git \
+        ca-certificates \
+        # libm-dev \
+        libgrpc++-dev \
+        libprotobuf-dev \
+        protobuf-compiler \
+        protobuf-compiler-grpc \
+        libhiredis-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY vcpkg.json .
-COPY . .
 
-RUN cmake -B build -S . \
-    -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
-    -G Ninja
-RUN cmake --build build
+COPY CMakeLists.txt .
+COPY proto/         proto/
+COPY include/       include/
+COPY src/           src/
+COPY tests/         tests/
 
-FROM ubuntu:22.04
+RUN cmake -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_ASM_NASM_COMPILER=/usr/bin/nasm \
+          -S . \
+          -B build
+
+RUN cmake --build build --parallel $(nproc)
+
+FROM ubuntu:24.04 AS runner
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libstdc++6 \
+        libgrpc++1.51t64 \
+        libprotobuf32t64 \
+        libhiredis1.1.0 \
+        # libm6 \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
+
 COPY --from=builder /app/build/astar_server .
+COPY --from=builder /app/build/unit_tests   .
+
+ENV REDIS_HOST=redis
+ENV REDIS_PORT=6379
+
 EXPOSE 50051
-CMD ["."]
+
+CMD ["./astar_server"]

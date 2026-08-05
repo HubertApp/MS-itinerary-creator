@@ -1,0 +1,38 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "c:/Users/delit/Documents/HubertApp/MS-itinerary-creator/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "cppStandard": "c++20",
+            "cStandard": "c23",
+            "mergeConfigurations": false,
+            "recursiveIncludes": {},
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true
+            }
+        },
+        {
+            "name": "c",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.26100.0",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64"
+        }
+    ],
+    "version": 4
+}
