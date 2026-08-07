@@ -30,5 +30,5 @@ std::pair<PQNode, MinHeap> pq_pop(MinHeap pq) {
   return {top, pq};
 }
 
-bool pq_empty(const MinHeap pq) { return pq.empty(); }
+bool pq_empty(const MinHeap &pq) { return pq.empty(); }
 } // namespace astar

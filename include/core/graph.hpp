@@ -2,6 +2,7 @@
 
 #include <optional>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <vector>
 
@@ -16,7 +17,7 @@ struct Node {
 
 struct Edge {
   std::string to_id;
-  double weight;
+  double weight;   // SECONDES — coût de traversée (contrat avec graph-manager)
   bool operator==(const Edge &) const = default;
 };
 
@@ -27,11 +28,11 @@ struct Graph {
 };
 
 Graph parse_graph(
-    const std::vector<std::tuple<std::string, double, double>> nodes,
-    const std::vector<std::tuple<std::string, std::string, double>> edges);
+    const std::vector<std::tuple<std::string, double, double>> &nodes,
+    const std::vector<std::tuple<std::string, std::string, double>> &edges);
 
-std::optional<Node> find_node(const Graph graph, const std::string node_id);
-std::optional<std::vector<Edge>> find_neighbors(const Graph g,
-                                                const std::string node_id);
+std::optional<Node> find_node(const Graph &graph, const std::string &node_id);
+std::optional<std::vector<Edge>> find_neighbors(const Graph &graph,
+                                                const std::string &node_id);
 
 } // namespace astar
