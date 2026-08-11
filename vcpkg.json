@@ -1,0 +1,9 @@
+{
+  "name": "astar-service",
+  "version": "1.0.0",
+  "dependencies": [
+    "grpc",
+    "protobuf",
+    "catch2"
+  ]
+}

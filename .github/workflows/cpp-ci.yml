@@ -1,0 +1,41 @@
+name: C++ CI (Test & Lint)
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run clang-format check
+        
+        run: |
+          sudo apt-get install -y clang-format
+          find src tests include -iname *.h -o -iname *.cpp | xargs clang-format --dry-run -Werror
+
+  build-and-test:
+    needs: lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ build-essential
+
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release -j $(nproc)
+
+      - name: Run Tests
+        working-directory: build
+        
+        run: ./unit_tests && ctest --output-on-failure

@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+
+  astar:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: astar_server
+    expose:
+      - "50051" 
+    networks:
+      - astar-net
+    restart: on-failure
+
+  envoy:
+    image: envoyproxy/envoy:v1.31-latest
+    container_name: astar_envoy
+    volumes:
+      - ./observability/envoy.yaml:/etc/envoy/envoy.yaml:ro
+    ports:
+      - "50051:50051"
+      - "9901:9901"   
+    depends_on:
+      - astar
+    networks:
+      - astar-net
+    restart: on-failure
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: astar_cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    privileged: true
+    networks:
+      - astar-net
+    restart: on-failure
+
+  unit_tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: astar_tests
+    command: ["./unit_tests"]
+    networks:
+      - astar-net
+    profiles:
+      - test
+
+networks:
+  astar-net:
+    external: true
+    name: astar-net
+
+volumes:
+  prometheus_data:
+  grafana_data:
