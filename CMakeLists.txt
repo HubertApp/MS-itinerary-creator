@@ -76,6 +76,7 @@ add_executable(unit_tests
     tests/test_graph.cpp
     tests/test_priority_queue.cpp
     tests/test_astar.cpp
+    # tests/bench_manuel.cpp
 )
 target_link_libraries(unit_tests PRIVATE astar_engine gtest_main)
 
