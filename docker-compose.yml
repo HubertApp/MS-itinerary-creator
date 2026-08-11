@@ -2,34 +2,45 @@ version: "3.9"
 
 services:
 
-  redis:
-    image: redis:7-alpine
-    container_name: astar_redis
-    ports:
-      - "6379:6379"         
-    volumes:
-      - redis_data:/data  
-    command: redis-server --save 60 1  
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
   astar:
     build:
       context: .
       dockerfile: Dockerfile
-      target: runner           
+      target: runner
     container_name: astar_server
+    expose:
+      - "50051" 
+    networks:
+      - astar-net
+    restart: on-failure
+
+  envoy:
+    image: envoyproxy/envoy:v1.31-latest
+    container_name: astar_envoy
+    volumes:
+      - ./observability/envoy.yaml:/etc/envoy/envoy.yaml:ro
     ports:
-      - "50051:50051"          
-    environment:
-      REDIS_HOST: redis        
-      REDIS_PORT: 6379
+      - "50051:50051"
+      - "9901:9901"   
     depends_on:
-      redis:
-        condition: service_healthy  
+      - astar
+    networks:
+      - astar-net
+    restart: on-failure
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: astar_cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    privileged: true
+    networks:
+      - astar-net
     restart: on-failure
 
   unit_tests:
@@ -39,10 +50,16 @@ services:
       target: runner
     container_name: astar_tests
     command: ["./unit_tests"]
-    depends_on:
-      - redis
+    networks:
+      - astar-net
     profiles:
       - test
 
+networks:
+  astar-net:
+    external: true
+    name: astar-net
+
 volumes:
-  redis_data:
+  prometheus_data:
+  grafana_data:
