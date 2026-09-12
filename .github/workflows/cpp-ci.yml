@@ -186,8 +186,8 @@ jobs:
           push: true
 
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/astar-service:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/astar-service:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/ms-itinerary-creator:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/ms-itinerary-creator:${{ github.sha }}
 
           cache-from: type=gha
           cache-to: type=gha,mode=max
