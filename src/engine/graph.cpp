@@ -1,4 +1,5 @@
 #include "core/graph.hpp"
+#include "logging/logging.hpp"
 
 namespace astar {
 
@@ -11,9 +12,20 @@ Graph parse_graph(
   for (const auto &[id, lat, lon] : nodes) {
     g.nodes[id] = Node{id, lat, lon};
   }
+  size_t unresolved_edges = 0;
   for (const auto &[from_id, to_id, weight] : edges) {
+
+    if (!g.nodes.contains(from_id) || !g.nodes.contains(to_id))
+      ++unresolved_edges;
     g.adjacency[from_id].push_back(Edge{to_id, weight});
   }
+
+  if (unresolved_edges > 0)
+    LOG_WARN("parse_graph : " + std::to_string(unresolved_edges) +
+             " arete(s) referencant un noeud inconnu");
+
+  LOG_DEBUG("parse_graph : " + std::to_string(g.nodes.size()) + " noeuds, " +
+            std::to_string(edges.size()) + " aretes");
   return g;
 }
 

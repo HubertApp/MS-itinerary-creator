@@ -9,13 +9,34 @@ enable_language(ASM)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
+endif()
+
 include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/refs/heads/main.zip
-)
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+
+find_package(GTest QUIET)
+if(NOT GTest_FOUND)
+  FetchContent_Declare(
+    googletest
+
+    URL https://github.com/google/googletest/archive/refs/tags/v1.15.2.zip
+  )
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  FetchContent_MakeAvailable(googletest)
+endif()
+
+find_package(benchmark QUIET)
+if(NOT benchmark_FOUND)
+  FetchContent_Declare(
+    benchmark
+    URL https://github.com/google/benchmark/archive/refs/tags/v1.9.1.zip
+  )
+
+  set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+  set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "" FORCE)
+  FetchContent_MakeAvailable(benchmark)
+endif()
 
 add_library(astar_engine 
     src/engine/math_utils.cpp
@@ -71,14 +92,31 @@ target_link_libraries(astar_grpc_service PUBLIC
 add_executable(astar_server src/main.cpp)
 target_link_libraries(astar_server PRIVATE astar_grpc_service)
 
-add_executable(unit_tests 
+# ---------------------------------------------------------------------------
+#  Tests
+# ---------------------------------------------------------------------------
+enable_testing()
+include(GoogleTest)
+
+add_executable(unit_tests
     tests/test_math_logique.cpp
     tests/test_graph.cpp
     tests/test_priority_queue.cpp
     tests/test_astar.cpp
-    # tests/bench_manuel.cpp
 )
-target_link_libraries(unit_tests PRIVATE astar_engine gtest_main)
+target_link_libraries(unit_tests PRIVATE astar_engine GTest::gtest_main)
+gtest_discover_tests(unit_tests PROPERTIES LABELS "unit")
 
-include(GoogleTest)
-gtest_discover_tests(unit_tests)
+add_executable(integration_tests
+    tests/integration/test_grpc_integration.cpp
+)
+target_link_libraries(integration_tests PRIVATE
+    astar_grpc_service
+    GTest::gtest_main
+)
+gtest_discover_tests(integration_tests PROPERTIES LABELS "integration")
+
+add_executable(perf_tests
+    tests/perf/bench_astar.cpp
+)
+target_link_libraries(perf_tests PRIVATE astar_engine benchmark::benchmark)
