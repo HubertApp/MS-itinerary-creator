@@ -1,9 +1,11 @@
+#include <exception>
 #include <grpcpp/grpcpp.h>
 #include <iostream>
 #include <memory>
 #include <string>
 
 #include "astar_service.hpp"
+#include "logging/logging.hpp"
 
 void RunServer() {
   std::string server_address("0.0.0.0:50051");
@@ -18,19 +20,28 @@ void RunServer() {
   std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
 
   if (!server) {
-    std::cerr << "Erreur critique : Le serveur gRPC n'a pas pu démarrer."
-              << std::endl;
+    LOG_ERROR("le serveur gRPC n'a pas pu demarrer sur " + server_address +
+              " (port deja utilise ?)");
     return;
   }
 
-  std::cout << "Serveur gRPC A* lancé avec succès sur " << server_address
-            << std::endl;
+  LOG_INFO("serveur gRPC A* pret sur " + server_address);
 
   server->Wait();
 }
 
 int main() {
-  RunServer();
+  std::cout.setf(std::ios::unitbuf);
+
+  try {
+    RunServer();
+  } catch (const std::exception &e) {
+    LOG_ERROR(std::string("arret sur exception non rattrapee : ") + e.what());
+    return 1;
+  } catch (...) {
+    LOG_ERROR("arret sur exception non rattrapee de type inconnu");
+    return 1;
+  }
   return 0;
 }
 

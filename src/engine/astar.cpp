@@ -1,7 +1,8 @@
 #include "core/astar.hpp"
 #include "core/priority_queue.hpp"
+#include "logging/logging.hpp"
 #include <algorithm>
-#include <limits>   
+#include <limits>
 #include <numbers>
 #include <optional>
 
@@ -20,19 +21,26 @@ reconstruct_path(const std::unordered_map<std::string, std::string> &came_from,
   return reconstruct_path(came_from, it->second, std::move(acc));
 }
 
-double heuristic_haversine(const std::string &from_id,
-                           const std::string &to_id, const Graph &graph) {
+double heuristic_haversine(const std::string &from_id, const std::string &to_id,
+                           const Graph &graph) {
 
   auto from = find_node(graph, from_id);
   auto to = find_node(graph, to_id);
-  if (!from || !to)
+  if (!from || !to) {
+
+    LOG_DEBUG("heuristique degradee a 0 : '" + from_id + "' ou '" + to_id +
+              "' absent du graphe");
     return 0.0;
+  }
   return geocalcul::haversine(from->lat, from->lon, to->lat, to->lon);
 }
 
 std::optional<AStarResult> run_astar(const Graph &graph,
                                      const std::string &start,
                                      const std::string &goal, Heuristic h) {
+
+  LOG_DEBUG("run_astar : start='" + start + "' goal='" + goal + "' sur " +
+            std::to_string(graph.nodes.size()) + " noeuds");
 
   if (start == goal)
     return AStarResult{{start}, 0.0, 0};
@@ -49,9 +57,13 @@ std::optional<AStarResult> run_astar(const Graph &graph,
     auto [cur, rest] = pq_pop(open_set);
     open_set = std::move(rest);
 
-    if (cur.id == goal)
-      return AStarResult{reconstruct_path(came_from, cur.id), g_score[cur.id],
-                         explored};
+    if (cur.id == goal) {
+      auto path = reconstruct_path(came_from, cur.id);
+      LOG_DEBUG("run_astar : but atteint, " + std::to_string(path.size()) +
+                " noeuds, cout=" + std::to_string(g_score[cur.id]) +
+                ", explores=" + std::to_string(explored));
+      return AStarResult{path, g_score[cur.id], explored};
+    }
 
     auto nbrs = find_neighbors(graph, cur.id);
     if (!nbrs) {
@@ -76,6 +88,10 @@ std::optional<AStarResult> run_astar(const Graph &graph,
     }
     ++explored;
   }
+
+  LOG_WARN("run_astar : aucun chemin de '" + start + "' vers '" + goal + "' (" +
+           std::to_string(explored) + " noeuds explores sur " +
+           std::to_string(graph.nodes.size()) + ")");
   return std::nullopt;
 }
 

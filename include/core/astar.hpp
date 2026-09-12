@@ -16,8 +16,8 @@ struct AStarResult {
   size_t nodes_explored;
 };
 
-double heuristic_haversine(const std::string &from_id,
-                           const std::string &to_id, const Graph &graph);
+double heuristic_haversine(const std::string &from_id, const std::string &to_id,
+                           const Graph &graph);
 
 inline double heuristic_zero(const std::string &, const std::string &,
                              const Graph &) {

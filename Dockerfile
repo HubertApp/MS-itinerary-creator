@@ -9,12 +9,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         ninja-build \
         git \
         ca-certificates \
-        # libm-dev \
         libgrpc++-dev \
         libprotobuf-dev \
         protobuf-compiler \
         protobuf-compiler-grpc \
         libhiredis-dev \
+        libgtest-dev \
+        libbenchmark-dev \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -33,6 +34,9 @@ RUN cmake -G Ninja \
 
 RUN cmake --build build --parallel $(nproc)
 
+
+RUN cd build && ctest --output-on-failure -L "unit|integration"
+
 FROM ubuntu:24.04 AS runner
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -42,16 +46,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libgrpc++1.51t64 \
         libprotobuf32t64 \
         libhiredis1.1.0 \
-        # libm6 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY --from=builder /app/build/astar_server .
-COPY --from=builder /app/build/unit_tests   .
+COPY --from=builder /app/build/astar_server       .
+COPY --from=builder /app/build/unit_tests         .
 
-ENV REDIS_HOST=redis
-ENV REDIS_PORT=6379
+COPY --from=builder /app/build/integration_tests  .
+
+
+ENV ASTAR_LOG_LEVEL=INFO
 
 EXPOSE 50051
 
