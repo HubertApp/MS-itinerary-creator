@@ -180,14 +180,14 @@ TEST(PriorityQueueTest, CheckThrowExceptionAfterInsertNaNValue) {
   astar::PQNode node;
   node.f_score = std::numeric_limits<double>::quiet_NaN();
   node.id = "noeud_A";
- 
+
   EXPECT_THROW(astar::pq_push(pq, node), astar::BadValueException);
 }
- 
+
 TEST(PriorityQueueTest, CheckAcceptZeroFScore) {
   astar::MinHeap pq;
   astar::PQNode node{0.0, "noeud_depart"};
- 
+
   EXPECT_NO_THROW({
     auto g = astar::pq_push(pq, node);
     EXPECT_EQ(g.size(), 1);

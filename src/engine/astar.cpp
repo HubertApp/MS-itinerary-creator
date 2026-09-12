@@ -2,7 +2,7 @@
 #include "core/priority_queue.hpp"
 #include "logging/logging.hpp"
 #include <algorithm>
-#include <limits>   
+#include <limits>
 #include <numbers>
 #include <optional>
 
@@ -21,8 +21,8 @@ reconstruct_path(const std::unordered_map<std::string, std::string> &came_from,
   return reconstruct_path(came_from, it->second, std::move(acc));
 }
 
-double heuristic_haversine(const std::string &from_id,
-                           const std::string &to_id, const Graph &graph) {
+double heuristic_haversine(const std::string &from_id, const std::string &to_id,
+                           const Graph &graph) {
 
   auto from = find_node(graph, from_id);
   auto to = find_node(graph, to_id);
@@ -89,8 +89,8 @@ std::optional<AStarResult> run_astar(const Graph &graph,
     ++explored;
   }
 
-  LOG_WARN("run_astar : aucun chemin de '" + start + "' vers '" + goal +
-           "' (" + std::to_string(explored) + " noeuds explores sur " +
+  LOG_WARN("run_astar : aucun chemin de '" + start + "' vers '" + goal + "' (" +
+           std::to_string(explored) + " noeuds explores sur " +
            std::to_string(graph.nodes.size()) + ")");
   return std::nullopt;
 }

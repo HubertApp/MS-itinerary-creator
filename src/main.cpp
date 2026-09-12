@@ -31,6 +31,7 @@ void RunServer() {
 }
 
 int main() {
+  std::cout.setf(std::ios::unitbuf);
 
   try {
     RunServer();

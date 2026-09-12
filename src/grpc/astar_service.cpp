@@ -19,10 +19,10 @@ namespace astar::grpc_service {
   const auto t0 = std::chrono::steady_clock::now();
   const std::string peer = context ? context->peer() : "inconnu";
 
-  LOG_INFO("Solve recu de " + peer + " : " + std::to_string(req->nodes().size()) +
-           " noeuds, " + std::to_string(req->edges().size()) + " aretes, '" +
+  LOG_INFO("Solve recu de " + peer + " : " +
+           std::to_string(req->nodes().size()) + " noeuds, " +
+           std::to_string(req->edges().size()) + " aretes, '" +
            req->start_id() + "' -> '" + req->goal_id() + "'");
-
 
   if (req->nodes().empty()) {
     LOG_WARN("Solve rejete (INVALID_ARGUMENT) : aucun noeud fourni");
@@ -69,8 +69,9 @@ namespace astar::grpc_service {
 
   } catch (const astar::EmptyPqException &e) {
 
-    LOG_ERROR(std::string("Solve : EmptyPqException -> INTERNAL (bug moteur) : ") +
-              e.what());
+    LOG_ERROR(
+        std::string("Solve : EmptyPqException -> INTERNAL (bug moteur) : ") +
+        e.what());
     return ::grpc::Status(::grpc::StatusCode::INTERNAL,
                           "erreur interne du moteur A*");
 
@@ -88,7 +89,6 @@ namespace astar::grpc_service {
   const double ms = std::chrono::duration<double, std::milli>(
                         std::chrono::steady_clock::now() - t0)
                         .count();
-
 
   if (!result) {
     LOG_INFO("Solve termine : aucun chemin, " + std::to_string(ms) + " ms");

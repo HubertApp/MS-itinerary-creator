@@ -17,7 +17,7 @@ struct Node {
 
 struct Edge {
   std::string to_id;
-  double weight;   // SECONDES — coût de traversée (contrat avec graph-manager)
+  double weight; // SECONDES — coût de traversée (contrat avec graph-manager)
   bool operator==(const Edge &) const = default;
 };
 

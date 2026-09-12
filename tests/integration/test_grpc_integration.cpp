@@ -24,7 +24,8 @@ void fill_grid(astar::proto::SolveRequest &req, int n) {
       node->set_lon(2.0 + c * 1e-3);
     }
 
-  auto add_edge = [&](const std::string &from, const std::string &to, double w) {
+  auto add_edge = [&](const std::string &from, const std::string &to,
+                      double w) {
     auto *e = req.add_edges();
     e->set_from_id(from);
     e->set_to_id(to);
@@ -71,7 +72,6 @@ void fill_disconnected(astar::proto::SolveRequest &req) {
 }
 
 } // namespace
-
 
 class AStarGrpcTest : public ::testing::Test {
 protected:
@@ -122,7 +122,6 @@ std::unique_ptr<astar::grpc_service::AStarServiceImpl> AStarGrpcTest::service_;
 std::unique_ptr<grpc::Server> AStarGrpcTest::server_;
 std::unique_ptr<astar::proto::AStarService::Stub> AStarGrpcTest::stub_;
 
-
 TEST_F(AStarGrpcTest, SolveReturnsOptimalPath) {
   astar::proto::SolveRequest req;
   fill_grid(req, 5);
@@ -156,7 +155,6 @@ TEST_F(AStarGrpcTest, SolveStartEqualsGoalReturnsSingleNode) {
   EXPECT_EQ(res.path(0), "A");
   EXPECT_DOUBLE_EQ(res.total_cost(), 0.0);
 }
-
 
 TEST_F(AStarGrpcTest, SolveRejectsEmptyNodeList) {
   astar::proto::SolveRequest req;
@@ -227,7 +225,7 @@ TEST_F(AStarGrpcTest, SolveWithNegativeWeightReturnsInvalidArgumentNotCrash) {
   auto *e = req.add_edges();
   e->set_from_id("A");
   e->set_to_id("B");
-  e->set_weight(-100.0); 
+  e->set_weight(-100.0);
 
   req.set_start_id("A");
   req.set_goal_id("B");

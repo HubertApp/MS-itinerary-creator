@@ -1,41 +1,150 @@
-name: C++ CI (Test & Lint)
+name: C++ CI (Lint, Tests, Coverage, Perf)
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: ["main", "develop"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+
+env:
+  DEPS: >-
+    cmake ninja-build g++
+    libgrpc++-dev libprotobuf-dev protobuf-compiler protobuf-compiler-grpc
+    libgtest-dev libbenchmark-dev
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Run clang-format check
-        
+
+      - name: Install clang-format
+        run: sudo apt-get update && sudo apt-get install -y clang-format
+
+
+      - name: Check formatting
         run: |
-          sudo apt-get install -y clang-format
-          find src tests include -iname *.h -o -iname *.cpp | xargs clang-format --dry-run -Werror
+          find src tests \( -iname "*.cpp" \) \
+            -print0 | xargs -0 clang-format --dry-run -Werror
 
   build-and-test:
     needs: lint
-    runs-on: ubuntu-latest
-    
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake g++ build-essential
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y $DEPS
 
-      - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Configure
+        run: cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: cmake --build build --config Release -j $(nproc)
+        run: cmake --build build --parallel $(nproc)
 
-      - name: Run Tests
+
+      - name: Unit tests
         working-directory: build
-        
-        run: ./unit_tests && ctest --output-on-failure
+        run: ctest --output-on-failure -L unit
+
+      - name: Integration tests
+        working-directory: build
+        run: ctest --output-on-failure -L integration
+
+  coverage:
+    needs: build-and-test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y $DEPS
+          pip install --quiet gcovr
+
+
+      - name: Build with coverage
+        run: |
+          cmake -G Ninja -B build-cov \
+                -DCMAKE_BUILD_TYPE=Debug \
+                -DASTAR_COVERAGE=ON
+          cmake --build build-cov --parallel $(nproc)
+
+      - name: Run tests
+        working-directory: build-cov
+        run: ctest --output-on-failure -L "unit|integration"
+
+      - name: Coverage report
+        run: |
+          gcovr --root . \
+                --filter 'src/' \
+                --filter 'include/core/' \
+                --filter 'include/logging/' \
+                --exclude 'tests/' \
+                --print-summary \
+                --txt coverage.txt \
+                --html-details coverage.html \
+                --xml coverage.xml
+
+          {
+            echo '## Couverture de code'
+            echo '```'
+            cat coverage.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+.
+          name: coverage-${{ github.sha }}
+          path: coverage.*
+          retention-days: 30
+
+      - name: Fail if coverage drops
+        run: |
+          gcovr --root . \
+                --filter 'src/' --filter 'include/core/' --filter 'include/logging/' \
+                --exclude 'tests/' \
+                --fail-under-line 70
+
+  performance:
+    needs: build-and-test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y $DEPS
+
+      - name: Build
+        run: |
+          cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --parallel $(nproc)
+
+      - name: Run benchmarks
+        working-directory: build
+        run: |
+          ./perf_tests \
+            --benchmark_repetitions=5 \
+            --benchmark_report_aggregates_only=true \
+            --benchmark_out=benchmark.json \
+            --benchmark_out_format=json \
+            | tee benchmark.txt
+
+      - name: Publish results
+        working-directory: build
+        run: |
+          {
+            echo '## Tests de performance'
+            echo '```'
+            cat benchmark.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-${{ github.sha }}
+          path: build/benchmark.json
+          retention-days: 90

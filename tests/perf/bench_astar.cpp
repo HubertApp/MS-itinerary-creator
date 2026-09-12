@@ -58,7 +58,6 @@ static void BM_Haversine(benchmark::State &state) {
 }
 BENCHMARK(BM_Haversine);
 
-
 static void BM_PqBuild_Copy(benchmark::State &state) {
   const int n = static_cast<int>(state.range(0));
   for (auto _ : state) {
@@ -91,17 +90,14 @@ BENCHMARK(BM_PqBuild_Move)
     ->Complexity()
     ->Unit(benchmark::kMicrosecond);
 
-
-
 static void BM_RunAStar_Grid(benchmark::State &state) {
   const int n = static_cast<int>(state.range(0));
   const bool use_haversine = state.range(1) != 0;
 
-
   const astar::Graph graph = make_grid(n);
   const std::string start = "n0_0";
-  const std::string goal = "n" + std::to_string(n - 1) + "_" +
-                           std::to_string(n - 1);
+  const std::string goal =
+      "n" + std::to_string(n - 1) + "_" + std::to_string(n - 1);
   const astar::Heuristic h = use_haversine
                                  ? astar::Heuristic(astar::heuristic_haversine)
                                  : astar::Heuristic(astar::heuristic_zero);
@@ -129,7 +125,6 @@ BENCHMARK(BM_RunAStar_Grid)
     ->Args({60, 0})
     ->Args({60, 1})
     ->Unit(benchmark::kMillisecond);
-
 
 int main(int argc, char **argv) {
   if (std::getenv("ASTAR_LOG_LEVEL") == nullptr)
