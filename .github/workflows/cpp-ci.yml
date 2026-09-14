@@ -43,11 +43,11 @@ jobs:
 
       - name: Unit tests
         working-directory: build
-        run: ctest --output-on-failure -L unit
+        run: ctest --output-on-failure -L unit --no-tests=error
 
       - name: Integration tests
         working-directory: build
-        run: ctest --output-on-failure -L integration
+        run: ctest --output-on-failure -L integration --no-tests=error
 
   coverage:
     needs: build-and-test
@@ -62,14 +62,29 @@ jobs:
 
       - name: Build with coverage
         run: |
+          set -euo pipefail
+
           cmake -G Ninja -B build-cov \
                 -DCMAKE_BUILD_TYPE=Debug \
-                -DASTAR_COVERAGE=ON
+                -DASTAR_COVERAGE=ON 2>&1 | tee cmake-configure.log
+
+          if grep -q "were not used by the project" cmake-configure.log; then
+            echo "::error::CMake ignore -DASTAR_COVERAGE : cette option manque dans CMakeLists.txt"
+            exit 1
+          fi
+
           cmake --build build-cov --parallel $(nproc)
+
+          gcno=$(find build-cov -name '*.gcno' | wc -l)
+          echo "fichiers .gcno (instrumentation) : $gcno"
+          if [ "$gcno" -eq 0 ]; then
+            echo "::error::build non instrumente — verifie le bloc ASTAR_COVERAGE dans CMakeLists.txt"
+            exit 1
+          fi
 
       - name: Run tests
         working-directory: build-cov
-        run: ctest --output-on-failure -L "unit|integration"
+        run: ctest --output-on-failure -L "unit|integration" --no-tests=error
 
       - name: Coverage report
         env:
@@ -77,7 +92,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          count=$(find build-cov -name '*.gcda' | wc -l)
+          count=$(find . -name '*.gcda' | wc -l)
           echo "fichiers .gcda trouves : $count"
           if [ "$count" -eq 0 ]; then
             echo "::error::aucune donnee de couverture — le build a-t-il ete fait avec -DASTAR_COVERAGE=ON, et les tests lances ensuite ?"
