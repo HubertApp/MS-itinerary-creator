@@ -8,8 +8,13 @@ services:
       dockerfile: Dockerfile
       target: runner
     container_name: astar_server
+    labels:
+      logging: "enabled"
+      service: "itinerary-creator"
+    environment:
+      - ASTAR_LOG_LEVEL=INFO
     expose:
-      - "50051" 
+      - "50051"
     networks:
       - astar-net
       - hubert-network
@@ -18,31 +23,16 @@ services:
   envoy:
     image: envoyproxy/envoy:v1.31-latest
     container_name: astar_envoy
+    labels:
+      logging: "enabled"
+      service: "itinerary-creator-envoy"
     volumes:
       - ./observability/envoy.yaml:/etc/envoy/envoy.yaml:ro
     ports:
       - "50051:50051"
-      - "9901:9901"   
+      - "9901:9901"
     depends_on:
       - astar
-    networks:
-      - astar-net
-    restart: on-failure
-    networks:
-      - astar-net
-      - hubert-network
-
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.49.1
-    container_name: astar_cadvisor
-    ports:
-      - "8080:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    privileged: true
     networks:
       - astar-net
       - hubert-network
@@ -67,7 +57,3 @@ networks:
   hubert-network:
     external: true
     name: hubert-network
-
-volumes:
-  prometheus_data:
-  grafana_data:
