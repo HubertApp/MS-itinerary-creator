@@ -53,6 +53,9 @@ COPY --from=builder /app/build/unit_tests   .
 ENV REDIS_HOST=redis
 ENV REDIS_PORT=6379
 
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
+USER appuser
+
 EXPOSE 50051
 
 CMD ["./astar_server"]
