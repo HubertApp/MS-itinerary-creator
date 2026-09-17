@@ -46,6 +46,33 @@ inline void set_min_level(Level l) { min_level().store(l); }
 
 inline bool enabled(Level l) { return l >= min_level().load(); }
 
+inline std::string json_escape(const std::string &s) {
+  std::string out;
+  out.reserve(s.size());
+  for (char c : s) {
+    switch (c) {
+    case '"':
+      out += "\\\"";
+      break;
+    case '\\':
+      out += "\\\\";
+      break;
+    case '\n':
+      out += "\\n";
+      break;
+    case '\r':
+      out += "\\r";
+      break;
+    case '\t':
+      out += "\\t";
+      break;
+    default:
+      out += c;
+    }
+  }
+  return out;
+}
+
 inline void log(Level level, const std::string &message,
                 const std::string &service = "astar",
                 const std::string &trace_id = "",
@@ -61,12 +88,12 @@ inline void log(Level level, const std::string &message,
   std::ostringstream out;
   out << "{" << "\"timestamp\":" << ts << "," << "\"level\":\""
       << level_str(level) << "\"," << "\"service\":\"" << service << "\","
-      << "\"message\":\"" << message << "\"";
+      << "\"message\":\"" << json_escape(message) << "\"";
 
   if (!trace_id.empty())
-    out << ",\"trace_id\":\"" << trace_id << "\"";
+    out << ",\"trace_id\":\"" << json_escape(trace_id) << "\"";
   if (!span_id.empty())
-    out << ",\"span_id\":\"" << span_id << "\"";
+    out << ",\"span_id\":\"" << json_escape(span_id) << "\"";
 
   out << "}";
 
